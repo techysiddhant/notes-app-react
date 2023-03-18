@@ -16,7 +16,6 @@ class NoteDataService {
     }
     getAllNotes = ()=>{
         return getDocs(noteCollectionRef,orderBy("createdAt","asc"));
-        // const docs = getDocs(noteCollectionRef,orderBy("createdAt","asc"));
         
     }
     getNote = (id)=>{

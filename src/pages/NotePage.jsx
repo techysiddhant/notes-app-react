@@ -1,10 +1,11 @@
 
-import { serverTimestamp } from 'firebase/firestore';
+import { collection, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // import Check from '../assets/check.svg';
 import {ReactComponent as  LeftArrorw} from '../assets/left-arrow.svg'
+import { db } from '../firebase-config';
 import NoteDataService from "../services/note.services";
 const NotePage = ({match,user}) => {
     const navigate = useNavigate();
@@ -28,6 +29,8 @@ const NotePage = ({match,user}) => {
         if(noteId.id !== "new"){
             getNote();
         }
+        // console.log("fron note")
+        
     },[]);
     const getNote = async()=>{
         const docNote = await NoteDataService.getNote(noteId.id);

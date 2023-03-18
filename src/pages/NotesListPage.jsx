@@ -1,23 +1,25 @@
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import AddButton from '../components/AddButton';
 import ListItem from '../components/ListItem';
-import NoteDataService from "../services/note.services";
+import { db } from '../firebase-config';
 
 const NotesListPage = ({user}) => {
     const [notes,setNotes] = useState([]);
-    
-    const getNotes = async() =>{
-        const data = await NoteDataService.getAllNotes();
-        const tempdata =[];
-        data.forEach((doc)=>{
-            if(user.email === doc.data().email){
-                tempdata.push({...doc.data(),id:doc.id});
-                }})
-        setNotes(tempdata);
-    }
     useEffect(()=>{
-        getNotes();
-    });
+        const q = query(collection(db,"notes"),orderBy("createdAt","desc"));
+        const unsubscribeForNotes = onSnapshot(q,(snap)=>{
+            let temp = snap.docs.map((item)=>{
+                    return {...item.data(), id:item.id}
+            })
+            temp = temp.filter(item=> item.email === user.email);
+            setNotes(
+                temp
+            );
+        });
+        return ()=>{unsubscribeForNotes();}
+    },[])
+    
   return (
     <div className='notes'>
         <div className="notes-header">
