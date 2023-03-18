@@ -18,7 +18,7 @@ const NotesListPage = ({user}) => {
             );
         });
         return ()=>{unsubscribeForNotes();}
-    },[])
+    },[user.email])
     
   return (
     <div className='notes'>
